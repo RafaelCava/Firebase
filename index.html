@@ -23,6 +23,7 @@
 
   <div class="container-login">
     <h2>Olá, você está logado!</h2>
+    <button class="logout">Sair</button>
   </div>
 
 
@@ -42,11 +43,12 @@
     appId: "1:1038741391108:web:f384ff83ccb8887650f251"
   };
   firebase.initializeApp(firebaseConfig);
-  // Começando Aqui
 
   var usuario = null;
 
   var formLogin = document.querySelector('form')
+  let btnLogout = document.querySelector('.logout')
+
   formLogin.addEventListener('submit', (e) =>{
     e.preventDefault()
     let email = document.querySelector('[name=email]').value
@@ -56,15 +58,28 @@
     .then((userCredential) => {
       // Signed in
       usuario = userCredential.user;
-      alert("logado com sucesso")
+      document.querySelector('.login').style.display = 'none'
+      document.querySelector('.container-login').style.display = 'block'
+      alert("logado com sucesso "+ usuario.email)
     })
     .catch((error) => {
-      var errorCode = error.code;
       var errorMessage = error.message;
       alert(errorMessage)
     });
-
+    
   })
+  
+  btnLogout.addEventListener('click',(e)=>{
+    e.preventDefault();
+    firebase.auth().signOut().then(() => {
+      alert("deslogado")
+      document.querySelector('.login').style.display = 'block'
+      document.querySelector('.container-login').style.display = 'none'
+  }).catch((error) =>{
+  
+  })
+})
+
 
 
 </script>
