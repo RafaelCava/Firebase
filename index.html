@@ -1,142 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TodoApp</title>
-    <style>
-      .container-login{
-        display: none
-      }
-    </style>
-</head>
-<body>
-  <div class="login">
-    <h2>Faça o Login no App</h2>
-    <form action="" class="login-form">
-      <input type="email" name="email" />
-      <input type="password" name="password" />
-      <input type="submit" name="acao" value="Logar!">
-    </form>
-  </div>
-
-  <div class="container-login">
-    <h2>Olá, você está logado!</h2>
-    <button class="logout">Sair</button>
-    <form action="" class="form-cadastro-tarefa">
-      <textarea name="tarefa"></textarea>
-      <input type="datetime-local" name="datetime" />
-      <input type="submit" name="acao" value="Cadastrar Tarefa" />
-    </form>
-    <div class="tarefas-usuario">
-      <h3>Listagem de tarefas atuais:</h3>
-      <ul id="tarefas"></ul>
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>TodoApp</title>
+      <style>
+        .container-login{
+          display: none
+        }
+      </style>
+  </head>
+  <body>
+    <div class="login">
+      <h2>Faça o Login no App</h2>
+      <form action="" class="login-form">
+        <input type="email" name="email" />
+        <input type="password" name="password" />
+        <input type="submit" name="acao" value="Logar!">
+      </form>
     </div>
-  </div>
+
+    <div class="container-login">
+      <h2>Olá, você está logado!</h2>
+      <button class="logout">Sair</button>
+      <form action="" class="form-cadastro-tarefa">
+        <textarea name="tarefa"></textarea>
+        <input type="datetime-local" name="datetime" />
+        <input type="submit" name="acao" value="Cadastrar Tarefa" />
+      </form>
+      <div class="tarefas-usuario">
+        <h3>Listagem de tarefas atuais:</h3>
+        <ul id="tarefas"></ul>
+      </div>
+    </div>
 
 
-<script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
 
 
-<script>
-  // Your web app's Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyC1raJ8v-CfF9Qz8yJv3bFezv10-c8Hhg8",
-    authDomain: "todolist-f3156.firebaseapp.com",
-    projectId: "todolist-f3156",
-    storageBucket: "todolist-f3156.appspot.com",
-    messagingSenderId: "1038741391108",
-    appId: "1:1038741391108:web:f384ff83ccb8887650f251"
-  };
-  firebase.initializeApp(firebaseConfig);
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyC1raJ8v-CfF9Qz8yJv3bFezv10-c8Hhg8",
+        authDomain: "todolist-f3156.firebaseapp.com",
+        projectId: "todolist-f3156",
+        storageBucket: "todolist-f3156.appspot.com",
+        messagingSenderId: "1038741391108",
+        appId: "1:1038741391108:web:f384ff83ccb8887650f251"
+      };
+      firebase.initializeApp(firebaseConfig);
 
-  var usuario = null;
+      var usuario = null;
 
-  var formLogin = document.querySelector('form.login-form')
-  let btnLogout = document.querySelector('.logout')
+      var formLogin = document.querySelector('form.login-form')
+      let btnLogout = document.querySelector('.logout')
 
-  formLogin.addEventListener('submit', (e) =>{
-    e.preventDefault()
-    let email = document.querySelector('[name=email]').value
-    let password = document.querySelector('[name=password]').value
+      formLogin.addEventListener('submit', (e) =>{
+        e.preventDefault()
+        let email = document.querySelector('[name=email]').value
+        let password = document.querySelector('[name=password]').value
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      // Signed in
-      usuario = userCredential.user;
-      document.querySelector('.login').style.display = 'none'
-      document.querySelector('.container-login').style.display = 'block'
-      alert("logado com sucesso "+ usuario.email)
+        firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Signed in
+          usuario = userCredential.user;
+          document.querySelector('.login').style.display = 'none'
+          document.querySelector('.container-login').style.display = 'block'
+          alert("logado com sucesso "+ usuario.email)
+        })
+        .catch((error) => {
+          var errorMessage = error.message;
+          alert(errorMessage)
+        });
+        
+      })
+      
+      btnLogout.addEventListener('click',(e)=>{
+        e.preventDefault();
+        firebase.auth().signOut().then(() => {
+          usuario = null
+          alert("Deslogado")
+          document.querySelector('.login').style.display = 'block'
+          document.querySelector('.container-login').style.display = 'none'
+          formLogin.reset()
+        }).catch((error) =>{
+          alert(error.message);
+        })
+      })
+      const db = firebase.firestore()
+      
+      firebase.auth().onAuthStateChanged((val) =>{
+        if(val){
+          usuario = val
+          document.querySelector('.login').style.display = 'none'
+          document.querySelector('.container-login').style.display = 'block'
+          alert("Bem-vindo de volta "+ usuario.email)
+
+          // ouvir mudanças no DB
+
+          db.collection('tarefas').where("UserId", "==", usuario.uid).onSnapshot((data)=>{
+            let list = document.querySelector('#tarefas')
+            list.innerHTML = ""
+            let tarefas = data.docs
+            tarefas = tarefas.sort((a,b) =>{
+              if(a.data().horario < b.data().horario){
+                return -1
+              }else{
+                return +1
+              }
+            })
+            tarefas.map(val=>{
+              list.innerHTML+= `<li>${val.data().tarefa} <a tarefa-id="${val.id}" href="#" class="excluir-btn">(X)</a></li>`
+            })
+            var excluirTarefas = document.querySelectorAll('.excluir-btn')
+            excluirTarefas.forEach(element =>{
+              element.addEventListener('click',(e)=>{
+                e.preventDefault()
+                let docId = element.getAttribute('tarefa-Id')
+                db.collection('tarefas').doc(docId).delete()
+              })
+            })
+          })
+        }
+      })
+
+    let formCadastro = document.querySelector('.form-cadastro-tarefa')
+
+    formCadastro.addEventListener('submit',(e) =>{
+      e.preventDefault()
+      let datetime = document.querySelector('.form-cadastro-tarefa [name=datetime]').value
+      let tarefa = document.querySelector('.form-cadastro-tarefa [name=tarefa]').value
+
+      
+      /* inserir e criar collection caso não exista*/
+      let dataAtual = new Date().getTime()
+      if(dataAtual > new Date(datetime).getTime()){
+        alert(`Você informou uma data no passado....`)
+        formCadastro.reset()
+      }else if(tarefa == '' || datetime == ''){
+        alert(`Não pode deixar campos vazios`)
+      }else{
+        db.collection('tarefas').add({ 
+          tarefa: tarefa,
+          horario: new Date(datetime).getTime(),
+          UserId: usuario.uid
+        })
+        formCadastro.reset()
+        alert(`Sua Tarefa foi Cadastrada com Sucesso`)
+      }
     })
-    .catch((error) => {
-      var errorMessage = error.message;
-      alert(errorMessage)
-    });
+
     
-  })
-  
-  btnLogout.addEventListener('click',(e)=>{
-    e.preventDefault();
-    firebase.auth().signOut().then(() => {
-      usuario = null
-      alert("Deslogado")
-      document.querySelector('.login').style.display = 'block'
-      document.querySelector('.container-login').style.display = 'none'
-      formLogin.reset()
-    }).catch((error) =>{
-      alert(error.message);
-    })
-  })
-  const db = firebase.firestore()
-  
-  firebase.auth().onAuthStateChanged((val) =>{
-    if(val){
-    usuario = val
-    document.querySelector('.login').style.display = 'none'
-    document.querySelector('.container-login').style.display = 'block'
-    alert("Bem-vindo de volta "+ usuario.email)
-    // ouvir mudanças no DB
 
-    db.collection('tarefas').where("UserId", "==", usuario.uid).onSnapshot((data)=>{
-      let list = document.querySelector('#tarefas')
-      list.innerHTML = ""
-      data.docs.map((val) =>{
-        list.innerHTML +=`<li>${val.data().tarefa}</li>`
-    })
-  })
-  }
-})
-
-
-
-
-let formCadastro = document.querySelector('.form-cadastro-tarefa')
-
-formCadastro.addEventListener('submit',(e) =>{
-  e.preventDefault()
-  let datetime = document.querySelector('.form-cadastro-tarefa [name=datetime]').value
-  let tarefa = document.querySelector('.form-cadastro-tarefa [name=tarefa]').value
-  /* inserir e criar collection caso não exista*/
-  let dataAtual = new Date().getTime()
-  if(dataAtual > new Date(datetime).getTime()){
-    alert(`Você informou uma data no passado....`)
-    formCadastro.reset()
-  }else if(tarefa == '' || datetime == ''){
-    alert(`Não pode deixar campos vazios`)
-  }else{
-    db.collection('tarefas').add({ 
-      tarefa: tarefa,
-      horario: new Date(datetime).getTime(),
-      UserId: usuario.uid
-    })
-    formCadastro.reset()
-    alert(`Sua Tarefa foi Cadastrada com Sucesso`)
-  }
-})
-
-</script>
-</body>
+    </script>
+  </body>
 </html>
