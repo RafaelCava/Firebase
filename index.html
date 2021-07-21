@@ -4,24 +4,21 @@
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="https://fonts.googleapis.com/css?family=Lato:100,100italic,300,300italic,regular,italic,700,700italic,900,900italic" rel="stylesheet" />
+      <link rel="stylesheet" href="/styles/style.css">
       <title>TodoApp</title>
-      <style>
-        .container-login{
-          display: none
-        }
-      </style>
   </head>
   <body>
-    <div class="login">
-      <h2>Faça o Login no App</h2>
+    <div class="login box">
+      <h2>Faça o Login no <span>Todo</span>App</h2>
       <form action="" class="login-form">
-        <input type="email" name="email" />
-        <input type="password" name="password" />
+        <input type="email" name="email" required/>
+        <input type="password" name="password" required/>
         <input type="submit" name="acao" value="Logar!">
       </form>
     </div>
 
-    <div class="container-login">
+    <div class="container-login box">
       <h2>Olá, você está logado!</h2>
       <button class="logout">Sair</button>
       <form action="" class="form-cadastro-tarefa">
