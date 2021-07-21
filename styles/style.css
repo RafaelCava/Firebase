@@ -118,4 +118,33 @@ li {
 .none {
   display: none; }
 
+.box-create {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  text-align: center; }
+  .box-create span {
+    color: green; }
+  .box-create form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap; }
+    .box-create form input {
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 0;
+        border-radius: 15px;
+      outline: 0; }
+    .box-create form input[type="submit"] {
+      font-weight: 700;
+      font-size: 1.3em;
+      cursor: pointer; }
+    .box-create form input[type="submit"]:hover {
+      background-color: green;
+      transition: 2s; }
+    .box-create form a {
+      color: #fff;
+      text-decoration: none; }
+
 /*# sourceMappingURL=style.css.map */

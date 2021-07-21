@@ -5,7 +5,8 @@
     font:
         family: 'lato'
 
-$font_peso: 700 
+$font_peso: 700
+$spanTodo: green 
 
 body
     display: flex
@@ -28,7 +29,7 @@ body
         margin: 
             bottom: 20px
         span    
-            color: green
+            color: $spanTodo
     form    
         display: flex
         flex:
@@ -133,3 +134,35 @@ li
                     transition: 1s
 .none
     display: none
+
+.box-create
+    display: flex
+    flex:  
+        direction: column
+        wrap: wrap
+    text-align: center
+    span
+        color: $spanTodo
+    form
+        margin-top: 20px    
+        display: flex
+        flex:
+            direction: column
+            wrap: wrap
+        input
+            padding: 10px
+            margin-bottom: 20px
+            border: 0
+                radius: 15px
+            outline: 0 
+        input[type="submit"]
+            font: 
+                weight: 700
+                size: 1.3em
+            cursor: pointer      
+        input[type="submit"]:hover
+            background-color: $spanTodo
+            transition: 2s
+        a
+            color: #fff
+            text-decoration: none

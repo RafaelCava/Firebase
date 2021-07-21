@@ -37,13 +37,16 @@
     </div>
 
     <div class="create-login box none">
-      <h2>Crie Sua Conta no <span>Todo</span>App</h2>
-      <form action="" class="form-create">
-        <input type="email" name="email-create" placeholder="E-mail:" required/>
-        <input type="password" name="password-create" placeholder="Senha:" required/>
-        <input type="password" name="password-create-repete" placeholder="Repetir Senha:" required/>
-        <input type="submit" value="Criar Conta" />
-      </form>
+      <div class="box-create">
+        <h2>Crie Sua Conta no <span>Todo</span>App</h2>
+        <form action="" class="form-create">
+          <input type="email" name="email-create" placeholder="E-mail:" required/>
+          <input type="password" name="password-create" placeholder="Senha:" required/>
+          <input type="password" name="password-create-repete" placeholder="Repetir Senha:" required/>
+          <input type="submit" value="Criar Conta" />
+          <a href="" name="voltar">Voltar</a>
+        </form>
+      </div>
     </div>
 
 
@@ -166,11 +169,19 @@
     // Criar usuário
     const formCreate = document.querySelector('.form-create')
     const linkCriar = document.querySelector("a[name=criar]")
+    const linkVoltar = document.querySelector("a[name=voltar]")
     linkCriar.addEventListener("click",(e)=>{
       e.preventDefault()
-      document.querySelector('.login').classList.toggle('none')
-      document.querySelector('.create-login').classList.toggle('none')
+      document.querySelector('.login').style.display = "none"
+      document.querySelector('.create-login').style.display = "block"
     })
+
+    linkVoltar.addEventListener("click",(e)=>{
+      e.preventDefault()
+      document.querySelector('.login').style.display = "block"
+      document.querySelector('.create-login').style.display = "none"
+    })
+
 
     formCreate.addEventListener('submit',(e)=>{
       const email = document.querySelector('[name=email-create]').value
@@ -183,13 +194,14 @@
           firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
           usuario = userCredential.user
-          document.querySelector('.login').classList.toggle('none')
-          document.querySelector('.create-login').classList.toggle('none')
+          document.querySelector('.create-login').style.display = "none"
           alert('Usuário Criando com Sucesso')
+          formCreate.reset()
         })
         .catch((error) => {
-          alert('Erro Ao criar seu Usuário Verificar Campos...')
+          alert('Erro Ao criar seu Usuário Verificar')
           console.error(error);
+          formCreate.reset()
         });
       }
 
