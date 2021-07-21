@@ -14,7 +14,7 @@
 <body>
   <div class="login">
     <h2>Faça o Login no App</h2>
-    <form action="">
+    <form action="" class="login-form">
       <input type="email" name="email" />
       <input type="password" name="password" />
       <input type="submit" name="acao" value="Logar!">
@@ -24,6 +24,14 @@
   <div class="container-login">
     <h2>Olá, você está logado!</h2>
     <button class="logout">Sair</button>
+    <form action="" class="form-cadastro-tarefa">
+      <textarea name="tarefa"></textarea>
+      <input type="datetime-local" name="datetime" />
+      <input type="submit" name="acao" value="Cadastrar Tarefa" />
+    </form>
+    <div class="tarefas-usuario">
+      <h3>Listagem de tarefas atuais:</h3>
+    </div>
   </div>
 
 
@@ -46,7 +54,7 @@
 
   var usuario = null;
 
-  var formLogin = document.querySelector('form')
+  var formLogin = document.querySelector('form.login-form')
   let btnLogout = document.querySelector('.logout')
 
   formLogin.addEventListener('submit', (e) =>{
@@ -72,15 +80,52 @@
   btnLogout.addEventListener('click',(e)=>{
     e.preventDefault();
     firebase.auth().signOut().then(() => {
-      alert("deslogado")
+      usuario = null
+      alert("Deslogado")
       document.querySelector('.login').style.display = 'block'
       document.querySelector('.container-login').style.display = 'none'
-  }).catch((error) =>{
-  
+      formLogin.reset()
+    }).catch((error) =>{
+      alert(error.message);
+    })
   })
+  
+  firebase.auth().onAuthStateChanged((val) =>{
+    if(val){
+    usuario = val
+    document.querySelector('.login').style.display = 'none'
+    document.querySelector('.container-login').style.display = 'block'
+    alert("Bem-vindo de volta "+ usuario.email)
+  }
 })
 
+// ouvir mudanças no DB
 
+
+let formCadastro = document.querySelector('.form-cadastro-tarefa')
+const db = firebase.firestore()
+
+formCadastro.addEventListener('submit',(e) =>{
+  e.preventDefault()
+  let datetime = document.querySelector('.form-cadastro-tarefa [name=datetime]').value
+  let tarefa = document.querySelector('.form-cadastro-tarefa [name=tarefa]').value
+  /* inserir e criar collection caso não exista*/
+  let dataAtual = new Date().getTime()
+  if(dataAtual > new Date(datetime).getTime()){
+    alert(`Você informou uma data no passado....`)
+    formCadastro.reset()
+  }else if(tarefa == '' || datetime == ''){
+    alert(`Não pode deixar campos vazios`)
+  }else{
+    db.collection('tarefas').add({ 
+      tarefa: tarefa,
+      horario: datetime,
+      UserId: usuario.uid
+    })
+    formCadastro.reset()
+    alert(`Sua Tarefa foi Cadastrada com Sucesso`)
+  }
+})
 
 </script>
 </body>
