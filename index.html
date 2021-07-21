@@ -31,6 +31,7 @@
     </form>
     <div class="tarefas-usuario">
       <h3>Listagem de tarefas atuais:</h3>
+      <ul id="tarefas"></ul>
     </div>
   </div>
 
@@ -89,6 +90,7 @@
       alert(error.message);
     })
   })
+  const db = firebase.firestore()
   
   firebase.auth().onAuthStateChanged((val) =>{
     if(val){
@@ -96,14 +98,22 @@
     document.querySelector('.login').style.display = 'none'
     document.querySelector('.container-login').style.display = 'block'
     alert("Bem-vindo de volta "+ usuario.email)
+    // ouvir mudanças no DB
+
+    db.collection('tarefas').where("UserId", "==", usuario.uid).onSnapshot((data)=>{
+      let list = document.querySelector('#tarefas')
+      list.innerHTML = ""
+      data.docs.map((val) =>{
+        list.innerHTML +=`<li>${val.data().tarefa}</li>`
+    })
+  })
   }
 })
 
-// ouvir mudanças no DB
+
 
 
 let formCadastro = document.querySelector('.form-cadastro-tarefa')
-const db = firebase.firestore()
 
 formCadastro.addEventListener('submit',(e) =>{
   e.preventDefault()
