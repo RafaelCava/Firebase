@@ -38,10 +38,10 @@
 
     <div class="create-login box none">
       <h2>Crie Sua Conta no <span>Todo</span>App</h2>
-      <form action="">
-        <input type="email" name="email-create" required/>
-        <input type="password" name="password-create" required/>
-        <input type="password" name="password-create-repete" required/>
+      <form action="" class="form-create">
+        <input type="email" name="email-create" placeholder="E-mail:" required/>
+        <input type="password" name="password-create" placeholder="Senha:" required/>
+        <input type="password" name="password-create-repete" placeholder="Repetir Senha:" required/>
         <input type="submit" value="Criar Conta" />
       </form>
     </div>
@@ -164,23 +164,36 @@
       }
     })
     // Criar usuário
-    
+    const formCreate = document.querySelector('.form-create')
     const linkCriar = document.querySelector("a[name=criar]")
     linkCriar.addEventListener("click",(e)=>{
       e.preventDefault()
       document.querySelector('.login').classList.toggle('none')
       document.querySelector('.create-login').classList.toggle('none')
+    })
+
+    formCreate.addEventListener('submit',(e)=>{
+      const email = document.querySelector('[name=email-create]').value
+      const password = document.querySelector('[name=password-create]').value
+      const passwordRepete = document.querySelector('[name=password-create-repete]').value
+      if(!password == passwordRepete){
+        alert('Suas Senhas são diferentes')
+      }else{
+        e.preventDefault()
+          firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          usuario = userCredential.user
+          document.querySelector('.login').classList.toggle('none')
+          document.querySelector('.create-login').classList.toggle('none')
+          alert('Usuário Criando com Sucesso')
+        })
+        .catch((error) => {
+          alert('Erro Ao criar seu Usuário Verificar Campos...')
+          console.error(error);
+        });
+      }
 
     })
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      var user = userCredential.user;
-    })
-    .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ..
-    });
     </script>
   </body>
 </html>
