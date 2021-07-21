@@ -15,6 +15,11 @@ body {
   text-align: center;
   display: flex;
   flex-flow: column wrap; }
+  .login span {
+    margin-bottom: 20px; }
+    .login span a {
+      color: white;
+      text-decoration: none; }
   .login h2 {
     margin-bottom: 20px; }
     .login h2 span {
@@ -109,5 +114,8 @@ li {
   .boxes .tarefas-usuario #tarefas li a:hover {
     color: red;
     transition: 1s; }
+
+.none {
+  display: none; }
 
 /*# sourceMappingURL=style.css.map */
