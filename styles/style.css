@@ -75,6 +75,7 @@ li {
     display: flex;
     flex-direction: column; }
     .boxes form input {
+      width: 100%;
       margin-bottom: 20px; }
     .boxes form input[type="submit"] {
       padding: 10px 0;
