@@ -129,7 +129,7 @@ formCadastro.addEventListener('submit',(e) =>{
   }else{
     db.collection('tarefas').add({ 
       tarefa: tarefa,
-      horario: datetime,
+      horario: new Date(datetime).getTime(),
       UserId: usuario.uid
     })
     formCadastro.reset()
