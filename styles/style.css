@@ -74,6 +74,10 @@ li {
   .boxes form {
     display: flex;
     flex-direction: column; }
+    .boxes form label {
+      color: #fff;
+      margin-bottom: 10px;
+      font-weight: 700; }
     .boxes form input {
       width: 100%;
       margin-bottom: 20px; }
@@ -115,6 +119,8 @@ li {
   .boxes .tarefas-usuario #tarefas li a:hover {
     color: red;
     transition: 1s; }
+  .boxes .tarefas-usuario #tarefas li span {
+    color: tomato; }
 
 .none {
   display: none; }

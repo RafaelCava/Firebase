@@ -25,6 +25,7 @@
         <h2>Olá, você está logado!</h2>
         <form action="" class="form-cadastro-tarefa">
           <textarea name="tarefa" placeholder="Insira sua Tarefa"></textarea>
+          <label for="datetime">Data e Hora da Tarefa:</label>
           <input type="datetime-local" name="datetime" />
           <input type="submit" name="acao" value="Cadastrar Tarefa" />
           <button class="logout">Sair</button>
@@ -119,6 +120,7 @@
             let list = document.querySelector('#tarefas')
             list.innerHTML = ""
             let tarefas = data.docs
+            // alert(tarefas[1].data().horarioSemFormat)
             tarefas = tarefas.sort((a,b) =>{
               if(a.data().horario < b.data().horario){
                 return -1
@@ -127,7 +129,7 @@
               }
             })
             tarefas.map(val=>{
-              list.innerHTML+= `<li>${val.data().tarefa} <a tarefa-id="${val.id}" href="#" class="excluir-btn">(X)</a></li>`
+              list.innerHTML+= `<li>${val.data().tarefa} <a tarefa-id="${val.id}" href="#" class="excluir-btn">(X)</a> - <span>${val.data().horarioSemFormat}<span></li>`
             })
             var excluirTarefas = document.querySelectorAll('.excluir-btn')
             excluirTarefas.forEach(element =>{
@@ -160,7 +162,8 @@
         db.collection('tarefas').add({ 
           tarefa: tarefa,
           horario: new Date(datetime).getTime(),
-          UserId: usuario.uid
+          UserId: usuario.uid,
+          horarioSemFormat: datetime
         })
         formCadastro.reset()
         alert(`Sua Tarefa foi Cadastrada com Sucesso`)
